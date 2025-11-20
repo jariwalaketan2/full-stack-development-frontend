@@ -20,8 +20,6 @@ This seat selection system provides an interactive venue map where users can sel
 - ✅ **Adjacent Seats**: Find and select N adjacent available seats automatically
 - ✅ **Real-time Summary**: Live pricing and seat details as you select
 
-For detailed requirements, see [REQUIREMENT.md](./REQUIREMENT.md).
-
 ## Architecture
 
 ### Component Structure
@@ -57,7 +55,7 @@ src/
 3. **Context API**: Used only for theme (minimal global state)
 4. **localStorage**: Persist selections and theme preference
 
-**Justification**: For this application's scope, external state management adds unnecessary complexity. Custom hooks provide excellent encapsulation and testability while keeping the bundle size minimal (~150KB gzipped).
+**Justification**: For this application's scope, external state management adds unnecessary complexity. Custom hooks provide excellent encapsulation and testability while keeping the bundle size minimal.
 
 ### Performance Optimizations
 
@@ -71,8 +69,6 @@ The application is optimized to handle **15,000+ seats at 60 FPS**:
 6. **Throttled Events**: Mouse move events throttled to 60 FPS
 7. **Spatial Grid**: Pre-computed grid for O(1) keyboard navigation
 8. **Transform-based Zoom**: CSS transforms for hardware-accelerated zoom/pan
-
-See [Performance Notes](#performance-notes) for benchmarks.
 
 ## Library Choices
 
@@ -96,7 +92,6 @@ See [Performance Notes](#performance-notes) for benchmarks.
 - Catch bugs at compile time, not runtime
 - Excellent IDE support with autocomplete
 - Self-documenting code with type definitions
-- Refactoring confidence
 
 **Benefits for this project**:
 - Type-safe seat selection logic
@@ -123,12 +118,6 @@ See [Performance Notes](#performance-notes) for benchmarks.
 - Mobile pinch-to-zoom support
 - Smooth animations with requestAnimationFrame
 - Accessible (doesn't break keyboard navigation)
-- Well-maintained with 1M+ downloads/month
-
-**Alternatives considered**:
-- Custom implementation: Too complex, reinventing the wheel
-- react-pan-zoom: Less maintained, fewer features
-- d3-zoom: Overkill for this use case, larger bundle
 
 ### Development Dependencies
 
@@ -139,83 +128,42 @@ See [Performance Notes](#performance-notes) for benchmarks.
 
 ### Why Minimal Dependencies?
 
-**Philosophy**: Every dependency is a liability (security, bundle size, maintenance).
-
 - **No UI library** (Material-UI, Chakra): Custom CSS is lighter and more flexible
 - **No state management** (Redux, MobX): React hooks are sufficient
 - **No utility library** (Lodash): Modern JavaScript has most utilities built-in
 - **No date library** (moment, date-fns): Not needed for this project
 - **No animation library** (Framer Motion): CSS transitions are sufficient
 
-**Result**: Total bundle size ~150KB gzipped (excellent for a feature-rich app).
 
 ## Incomplete Features / TODOs
 
-### Known Limitations
-
-1. **No Backend Integration**: Currently uses static JSON. Future: REST API or GraphQL
-2. **No User Authentication**: No login system (out of scope for MVP)
-3. **No Payment Integration**: Selection only, no checkout flow
-4. **No Real-time Updates**: Seat availability doesn't update live (would need WebSocket)
-5. **No Seat Reservation Timer**: Selected seats aren't held for a time period
-
-### Known Bugs
-
-- None currently identified. Please report issues on GitHub.
-
-### Future Enhancements
-
-1. **Backend Integration**
-   - REST API for venue data
-   - Real-time seat availability via WebSocket
-   - Seat reservation with timeout
-
-2. **Enhanced Features**
-   - Seat filtering by price range
-   - Section-based view toggle
-   - 3D venue visualization
-   - Seat recommendations based on preferences
-   - Multi-language support (i18n)
-
-3. **Performance**
-   - Virtual scrolling for extremely large venues (50,000+ seats)
-   - Web Worker for seat calculations
-   - Progressive loading of seat data
-
-4. **Accessibility**
-   - Voice control support
-   - High contrast mode improvements
-   - Better screen reader announcements
-
-5. **Analytics**
-   - Track popular seats/sections
-   - Heatmap of selection patterns
-   - A/B testing framework
+- **E2E Test Integration**: Playwright tests implemented but require integration for full E2E test.
+- **Real-time Seat Updates**: No WebSocket implementation for live seat availability synchronization
 
 ## How to Run
 
 ### Prerequisites
 
 - **Node.js**: v18.0.0 or higher
-- **npm**: v9.0.0 or higher (comes with Node.js)
-- **Modern browser**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
+- **pnpm**
+
 
 ### Installation
 
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd seat-selection-frontend
+cd full-stack-development-frontend
 
 # Install dependencies
-npm install
+pnpm install
 ```
 
 ### Development
 
 ```bash
 # Start development server (http://localhost:5173)
-npm run dev
+pnpm run dev
 
 # The app will automatically reload when you make changes
 ```
@@ -224,16 +172,10 @@ npm run dev
 
 ```bash
 # Create production build
-npm run build
+pnpm run build
 
 # Output will be in ./dist directory
 ```
-
-### Preview Production Build
-
-```bash
-# Preview the production build locally
-npm run preview
 
 # Serves the built app at http://localhost:4173
 ```
@@ -242,10 +184,10 @@ npm run preview
 
 ```bash
 # Check code quality
-npm run lint
+pnpm run lint
 
 # Auto-fix linting issues
-npm run lint -- --fix
+pnpm run lint -- --fix
 ```
 
 ## How to Run Tests
@@ -254,13 +196,13 @@ npm run lint -- --fix
 
 ```bash
 # Run all unit tests
-npm test
+pnpm test
 
 # Run tests in watch mode (re-runs on file changes)
-npm run test:ui
+pnpm run test:ui
 
 # Run tests with coverage report
-npm run test:coverage
+pnpm run test:coverage
 ```
 
 **Test files location**: `src/**/__tests__/*.test.ts(x)`
@@ -269,16 +211,16 @@ npm run test:coverage
 
 ```bash
 # Run all E2E tests (headless)
-npm run test:e2e
+pnpm run test:e2e
 
 # Run E2E tests in UI mode (interactive)
-npm run test:e2e:ui
+pnpm run test:e2e:ui
 
 # Run E2E tests in debug mode
-npm run test:e2e:debug
+pnpm run test:e2e:debug
 
 # View test report
-npm run test:e2e:report
+pnpm run test:e2e:report
 ```
 
 **Test files location**: `e2e/*.spec.ts`
@@ -287,18 +229,8 @@ npm run test:e2e:report
 
 Current coverage targets:
 - **Unit tests**: >80% coverage
-- **E2E tests**: 100% of critical user journeys
-- **Accessibility**: WCAG 2.1 AA compliance verified
 
 ## Performance Notes
-
-### Target Metrics
-
-- **Load Time**: < 3 seconds on 3G network
-- **Time to Interactive**: < 2 seconds
-- **Frame Rate**: 60 FPS during interactions
-- **Seat Capacity**: 15,000+ seats without performance degradation
-- **Bundle Size**: < 200KB gzipped
 
 ### Optimizations Implemented
 
@@ -310,66 +242,6 @@ Current coverage targets:
 6. **Throttled Events**: Mouse move throttled to 16ms (60 FPS)
 7. **CSS Transforms**: Hardware-accelerated zoom/pan
 8. **Code Splitting**: Lazy load non-critical components (future)
-
-### Benchmark Results
-
-Tested on MacBook Pro M1, Chrome 120:
-
-| Metric | Result | Target | Status |
-|--------|--------|--------|--------|
-| Initial Load | 1.2s | < 3s | ✅ |
-| Time to Interactive | 1.5s | < 2s | ✅ |
-| Seat Selection | 8ms | < 100ms | ✅ |
-| Zoom Operation | 16ms | < 100ms | ✅ |
-| Pan Operation | 12ms | < 100ms | ✅ |
-| Keyboard Nav | 5ms | < 50ms | ✅ |
-| Frame Rate | 60 FPS | 60 FPS | ✅ |
-
-### Testing Methodology
-
-1. **Chrome DevTools Performance**: Record interactions, analyze flame graphs
-2. **Lighthouse**: Automated performance audits
-3. **React DevTools Profiler**: Identify unnecessary re-renders
-4. **Manual Testing**: Test on low-end devices (iPhone 8, Android mid-range)
-
-## Accessibility
-
-### WCAG 2.1 AA Compliance
-
-- ✅ **Keyboard Navigation**: Full keyboard support (arrow keys, Enter, Space, Escape)
-- ✅ **Screen Reader Support**: ARIA labels on all interactive elements
-- ✅ **Color Contrast**: 4.5:1 minimum for text, 3:1 for UI components
-- ✅ **Focus Indicators**: Visible focus indicators (3px gold outline)
-- ✅ **Semantic HTML**: Proper heading hierarchy, landmarks
-- ✅ **Reduced Motion**: Respects `prefers-reduced-motion`
-- ✅ **Touch Targets**: Minimum 44x44px for touch elements
-
-### Keyboard Shortcuts
-
-| Key | Action |
-|-----|--------|
-| Arrow Keys | Navigate between seats |
-| Enter / Space | Select/deselect focused seat |
-| S | Quick select focused seat |
-| Escape | Clear all selections |
-| Home | Jump to first seat |
-| End | Jump to last seat |
-| Tab | Navigate between UI elements |
-
-### Screen Reader Support
-
-- Seats announce: Section, Row, Seat Number, Price, Status, Selection state
-- Selection changes announced via aria-live regions
-- Zoom level changes announced
-- Error messages announced
-
-### Color Contrast Ratios
-
-| Element | Ratio | Standard |
-|---------|-------|----------|
-| Body Text | 7.2:1 | AA (4.5:1) ✅ |
-| UI Components | 4.8:1 | AA (3:1) ✅ |
-| Focus Indicator | 8.3:1 | AA (3:1) ✅ |
 
 ## Project Structure
 
@@ -405,10 +277,6 @@ seat-selection-frontend/
 │   ├── error-handling.spec.ts
 │   ├── performance.spec.ts
 │   └── helpers.ts
-├── task/                  # Project documentation
-│   ├── REQUIREMENT.md
-│   ├── IMPLEMENTATION_CHECKLIST.md
-│   └── ...
 ├── playwright.config.ts   # E2E test configuration
 ├── vitest.config.ts       # Unit test configuration
 ├── vite.config.ts         # Build configuration
@@ -416,45 +284,3 @@ seat-selection-frontend/
 ├── package.json           # Dependencies and scripts
 └── README.md              # This file
 ```
-
-## Browser Support
-
-| Browser | Version | Status |
-|---------|---------|--------|
-| Chrome | 90+ | ✅ Fully supported |
-| Firefox | 88+ | ✅ Fully supported |
-| Safari | 14+ | ✅ Fully supported |
-| Edge | 90+ | ✅ Fully supported |
-| Mobile Safari | iOS 14+ | ✅ Fully supported |
-| Chrome Mobile | Android 90+ | ✅ Fully supported |
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Code Style
-
-- Follow ESLint rules
-- Use TypeScript for all new code
-- Write tests for new features
-- Add JSDoc comments to exported functions
-- Keep components under 300 lines
-
-## License
-
-This project is licensed under the MIT License.
-
-## Acknowledgments
-
-- React team for the excellent framework
-- Playwright team for robust E2E testing
-- react-zoom-pan-pinch contributors
-- WCAG guidelines for accessibility standards
-
----
-
-**Built with ❤️ using React, TypeScript, and Vite**
